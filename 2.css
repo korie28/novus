@@ -237,11 +237,16 @@ sup {
 }
 
 a {
+<<<<<<< Updated upstream
   color: #ffc800;
   text-decoration: underline;
+=======
+  color: #1193df;
+  text-decoration: none;
+>>>>>>> Stashed changes
 }
 a:hover {
-  color: #cca000;
+  color: #1193df;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -2600,7 +2605,7 @@ textarea.form-control-lg {
   width: 1rem;
   height: 1rem;
   margin-top: -0.25rem;
-  background-color: #ffc800;
+  background-color: #1193df;
   border: 0;
   border-radius: 1rem;
   -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -2629,7 +2634,7 @@ textarea.form-control-lg {
 .form-range::-moz-range-thumb {
   width: 1rem;
   height: 1rem;
-  background-color: #ffc800;
+  background-color: #1193df;
   border: 0;
   border-radius: 1rem;
   -moz-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -3037,32 +3042,32 @@ textarea.form-control-lg {
 
 .btn-primary {
   color: #fff;
-  background-color: #ffc800;
-  border-color: #ffc800;
+  background-color: #1193df;
+  border-color: #1193df;
 }
 .btn-primary:hover {
   color: #fff;
-  background-color: #d9aa00;
-  border-color: #cca000;
+  background-color: #1193df;
+  border-color: #1193df;
 }
 .btn-check:focus + .btn-primary, .btn-primary:focus {
   color: #fff;
-  background-color: #d9aa00;
-  border-color: #cca000;
+  background-color: #1193df;
+  border-color: #1193df;
   box-shadow: 0 0 0 0.25rem rgba(255, 208, 38, 0.5);
 }
 .btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #cca000;
-  border-color: #bf9600;
+  background-color: #1193df;
+  border-color: #1193df;
 }
 .btn-check:checked + .btn-primary:focus, .btn-check:active + .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus, .show > .btn-primary.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.25rem rgba(255, 208, 38, 0.5);
 }
 .btn-primary:disabled, .btn-primary.disabled {
   color: #fff;
-  background-color: #ffc800;
-  border-color: #ffc800;
+  background-color: #1193df;
+  border-color: #1193df;
 }
 
 .btn-secondary {
@@ -3949,7 +3954,7 @@ textarea.form-control-lg {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
-  color: #ffc800;
+  color: #1193df;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
@@ -3959,7 +3964,11 @@ textarea.form-control-lg {
   }
 }
 .nav-link:hover, .nav-link:focus {
+<<<<<<< Updated upstream
   color: #cca000;
+=======
+  color: #1193df;
+>>>>>>> Stashed changes
 }
 .nav-link.disabled {
   color: #6c757d;

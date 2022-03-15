@@ -102,7 +102,11 @@
         </div>
 
         <div class="col-12 my-4">
+<<<<<<< Updated upstream:entry.php
             <button type="submit" class="btn btn-primary">Sign up</button>
+=======
+            <input type="submit" class="btn btn-primary" value="Sign up">
+>>>>>>> Stashed changes:entry_form.php
         </div>
  
     </form>
