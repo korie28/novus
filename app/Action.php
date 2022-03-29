@@ -227,11 +227,12 @@ class Action
     // header,include,bodyまで出力する
     // SEO対策、javascript/cssを追加するときは、ここに追加。
     function printHeader() {
-      echo '<html>';
+      echo '<!DOCTYPE html>';
+      echo '<html lang="ja">';
       echo '<head>';
       echo '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">';
       echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
-      echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+      echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
       echo '<link rel="stylesheet" type="text/css" href="' . DOMAIN . '/public/CSS/qanda.css?ver=' . VERSION . '" />';
       echo '<link rel="stylesheet" type="text/css" href="' . DOMAIN . '/public/CSS/jquery.datetimepicker.css" media="screen" />';
       echo '<link rel="stylesheet" type="text/css" href="' . DOMAIN . '/public/CSS/bootstrap-4.4.1.css">';
@@ -254,6 +255,7 @@ class Action
       echo '<body><div class="container">';
     }
 }
+
 
 
 

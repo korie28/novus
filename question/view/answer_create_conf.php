@@ -45,17 +45,82 @@
 
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="2.css" />
+  <link rel="stylesheet" type="text/css" href="../../css/mypage.css" />
+  <link rel="stylesheet" type="text/css" href="../../css/top.css" />
+  <title>質問投稿完了</title>
+</head>
 
-<div>投稿内容の確認</div>
-<div>以下の内容でよろしいですか？</div>
-<div>内容：<div><?php echo $a_message ?></div></div>
+<body>
+    <!--メニュー-->
+    <header>
+        <div class="navtext-container">
+            <div class="navtext">Q&A SITE</div>
+        </div>
+        <input type="checkbox" class="menu-btn" id="menu-btn">
+        <label for="menu-btn" class="menu-icon"><span class="navicon"></span></label>
+        <ul class="menu">
+            <li class="top"><a href="login_top.php">TOP Page</a></li>
+            <li><a href="../userEdit/edit_user.php">My Page</a></li>
+            <li><a href="#">TO DO LIST</a></li>
+            <li><a href="../../question/view/qhistory.php">質問 履歴</a></li>
+            <li><a href="../../">記事 履歴</a></li>
+            <li>
+                <form type="hidden" action="logout.php" method="POST">
+				    <input type="submit" name="logout" value="ログアウト" id="logout" style="text-align:left;">
+                </form>
+            </li>
+        </ul>
+    </header>
 
-<form method="POST" action="">
-  <input type="hidden" name="a_message" value="<?php echo $a_message; ?>">
-  <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-  <input type="hidden" name="question_id" value="<?php echo $question_id ?>">
-  <input type="submit" name="a_comp"value="投稿">
-</form>
-<button type="button" onclick="location.href='../../top/userLogin/login_top.php'">TOP</button>
+    <!--コンテンツ-->
+    <section class="wrapper">
+        <div class="container">
+            <div class="content">
+                <p class="h4">投稿内容の確認</p>
+                <p>以下の内容でよろしいですか？</p>
+                <!--回答内容の確認-->
+                <div class="fw-bold pb-1">内容</div>
+                <div><?php echo $a_message ?></div>
+                <form method="POST" action="">
+                    <input type="hidden" name="a_message" value="<?php echo $a_message; ?>">
+                    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                    <input type="hidden" name="question_id" value="<?php echo $question_id ?>">
+                    <input type="submit" name="a_comp"value="投稿">
+                </form>
+                <button type="button" class="btn btn-outline-dark fw-bold mb-5" onclick="location.href='../../top/userLogin/login_top.php'">TOP</button>
+                <button type="button" class="btn btn-outline-dark fw-bold mb-5" onclick="history.back()">戻る</button>
+            </div>
+        </div>
+    </section>
 
-<button type="button" onclick="history.back()">戻る</button>
+    <!-- フッタ -->
+    <footer class="h-10"><hr>
+		    <div class="footer-item text-center">
+		    	  <h4>Q&A SITE</h4>
+		    	  <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+		    			  <a class="nav-link small" href="#">記事</a>
+		    		</li>
+		    		<li class="nav-item">
+		    			  <a class="nav-link small" href="#">質問</a>
+		    		</li>
+		    		<li class="nav-item">
+		    			  <a class="nav-link small" href="#">本検索</a>
+		    		</li>
+		    		<li class="nav-item">
+		    			  <a class="nav-link small" href="#">お問い合わせ</a>
+		    		</li>
+		    	</ul>
+		    </div>
+		  <p class="text-center small mt-2">Copyright (c) HTMQ All Rights Reserved.</p>
+	</footer>
+</body>
+</html>

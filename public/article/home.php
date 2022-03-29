@@ -1,8 +1,8 @@
 <?php
 // 記事一覧表示
-require_once "../../app/ArticleAct.php";
-require_once '../../app/Token.php';
-require_once '../../app/Utils.php';
+require_once "../../model/ArticleAct.php";
+require_once '../../model/Token.php';
+require_once '../../model/Utils.php';
 
 use Qanda\ArticleAct;
 use Qanda\Token;

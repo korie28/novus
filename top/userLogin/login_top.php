@@ -26,8 +26,8 @@ if (!$level) {
 }
 
 //最新の質問を表示
-$hasTaken = QuestionLogic::newQuestion();
-if(!$hasTaken){
+$newQuestion = QuestionLogic::newQuestion();
+if(!$newQuestion){
 	$err['question'] = '質問の読み込みに失敗しました';
 }
 ?>
@@ -109,20 +109,24 @@ if(!$hasTaken){
 		        	</div>
                 </div>
 
-	            <!--新着の記事-->
-	            <div id="news" class="text-center">
-	            	<h5>新着の質問</h5>
-	            	<p class="font-weight-bold">題名：<?php echo $hasTaken['title'] ?></p>
-	            	<p class="font-weight-normal">カテゴリ：<?php echo $hasTaken['category_name'] ?></p>
-	            	<p class="font-weight-normal">本文：<?php echo $hasTaken['message'] ?></p>
-	            	<hr>
-	            </div>
+			    <!-- 通常時、新着の質問を表示 -->
+		        <?php if(isset($newQuestion)): ?>
+		        	<div>新着の質問</div>
+		        	<?php foreach($newQuestion as $value): ?>
+		        		<div><a href="question_disp.php? question_id=<?php echo $value['question_id']?>">題名：<?php echo htmlspecialchars($value['title']) ?></a></div>
+		        		<div>カテゴリ：<?php echo htmlspecialchars($value['category_name']) ?></div>
+		        		<div>本文：<?php echo htmlspecialchars($value['message']) ?></div>
+		        		<div>名前：<?php echo htmlspecialchars($value['name']) ?></div>
+		        		<div><?php echo htmlspecialchars($value['icon']) ?></div>
+		        	<div>日時：<?php echo htmlspecialchars($value['post_date']) ?></div>
+		        	<?php endforeach; ?>
+		        <?php endif; ?>
 			</div>
 		</div>
 	</section>
 	
 	    <!-- フッタ -->
-	    <footer class="h-10">
+	    <footer class="h-10"><hr>
 	    	<div class="footer-item text-center">
 	    		<h4>Q&A SITE</h4>
 	    		<ul class="nav nav-pills nav-fill">
