@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BootstrapのCSS読み込み -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery読み込み -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- BootstrapのJS読み込み -->
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="2.css" />
+    <title>CSS learning</title>
+</head>
+<body>
+	<!-- ヘッダ -->
+	<header>
+<<<<<<< Updated upstream
+      <div class="row">>
+          <p class="h1 col-md-4">Q&A SITE</p>
+          <a href="login.php" class= "col-md-2">ログイン</a>
+          <a href="http://localhost/qandasite/core/entry.php" class= "col-md-2">会員登録</a>
+      </div>
+  </header>
+
+	<ul class="nav justify-content-center">
+    <li class="nav-item">
+      <a class="nav-link active" href="#">質問投稿</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">記事サイト</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">求人検索</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#"></a>
+    </li>
+  </ul>
+
+	<!-- コンテンツ（中央カラム） -->
+<<<<<<< HEAD
+=======
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="avbar-brand font-weight-bold h3" href="#">Q&A SITE</a>
+			<span class="navbar-text">
+				<a href="login_form.php" class= "col-md-2 small">LogIn</a>
+			</span>
+		</div>
+
+		<ul class="nav">
+			<li class="nav-item">
+				<a class="nav-link active small" href="#">質問Page</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link small" href="#">記事Page</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link small" href="#">本Page</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link small" href="#">MyPage</a>
+			</li>
+		</ul>
+	</header>
+<!-- コンテンツ（中央カラム） -->
+>>>>>>> Stashed changes
+	<div id="content" class="text-center">
+		<div class="text-center">
+      <br><br>
+			<h5>質問を検索する</h5>
+              <form>
+                <div class="form-row text-center">
+                  <div id="keyword" class="form-group col-row">
+                    <label for="inputEmail4">キーワード</label>
+                    <div>
+                      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                    </div>
+                  </div>
+                  <br>
+                  <div class="form-group col-row">
+                    <label for="inputPassword4">ジャンル</label>
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                      <option selected>Choose...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+                <br>
+                <button type="submit" class="btn btn-primary">Search</button>
+                <hr>
+=======
+	<div id="content">
+		<div id="search-area">
+			<h2>質問を検索する</h2>
+             <!--キーワードを入力-->
+			<form method="get" action=""></form>
+			<input type="text" name="filter_free" size="40" placeholder="例）キーワード">
+				<!--言語を選択-->
+				<select id="blood" name="">
+				    <option value="">言語
+				    <option value="C言語">C言語
+				    <option value="C++">C++
+				    <option value="Java">Java
+				    <option value="C#">C#
+				    <option value="JavaScript">JavaScript
+				    <option value="PHP">PHP
+				    <option value="Ruby">Ruby
+				    <option value="TypeScript">TypeScript
+				    <option value="Python">Python
+				    <option value="C言語">C
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				    <option value="C言語">C言語
+				</select>
+				<input type="button" value="絞り込む" id="button"> <input type="button" value="すべて表示" id="button2">
+>>>>>>> ef71e20494552b9062bbe542d7b682667f8f5f6d
+			</form>
+        </div>
+
+		<!-- ニュース（中央カラム） -->
+    <br>
+		<div id="news" class="text-center">
+			<h4>新着の質問</h4>
+			<h5>質問投稿のタイトルが入るよ</h5>
+			<p>
+			ここに質問投稿が入るよ
+			</p>
+			<p>投稿日時とか入れる</p>
+			<hr />
+		</div>
+
+	</div>
+
+	
+	<!-- フッタ -->
+	<p class="text-center">Copyright (c) HTMQ All Rights Reserved.</p></div>
+
+</div>
+</body>
+</html>
