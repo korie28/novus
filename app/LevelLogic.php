@@ -112,7 +112,7 @@ class LevelLogic
 
     $sql = 'SELECT user_id, name, level, icon, comment FROM users WHERE user_id = ?';
 
-    // question_idを配列に入れる
+    // user_idを配列に入れる
     $arr = [];
     $arr[] = $levelData['user_id']; // user_id
     
