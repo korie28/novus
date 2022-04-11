@@ -43,7 +43,7 @@ if (Utils::mbTrim($message) === "") {
     exit;
 }
 
-if (! $act->isCategory($category)) {
+if (!$act->isCategory($category)) {
     echo "failed-category";
     exit;
 }
@@ -59,6 +59,8 @@ if (!$article_id) {
     // 記事IDがあれば編集処理
     $act->update($article_id, $title, $message, $category);
 }
+
+Token::regenerate();
 
 // ajax呼び出し。 戻り値を出力
 echo "success";

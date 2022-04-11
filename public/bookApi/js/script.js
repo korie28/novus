@@ -1,7 +1,12 @@
 $(function () {
-    // クリックした時
+
+    // ボタンクリックにより発火
     $("#search-button").click(function () {
-        searchBooks(); //関数searchBooksを呼び出す
+        searchBooks(); // 検索実行
+    });
+    // 変更イベントにより発火
+    $('.search-text').change(function () {
+        searchBooks(); // 検索実行
     });
 
     //関数searchBooks
@@ -16,7 +21,7 @@ $(function () {
         $(".lists__item").remove(); //画面の初期化
 
         $.ajax({
-            url: 'https://www.googleapis.com/books/v1/volumes?q=' + searchText + displayedNum + displayedOrderBy,
+            url: 'https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(searchText) + displayedNum + displayedOrderBy,
             type: 'GET',// HTTP通信の種類
             datatype: 'json',//サーバから返されるデータの型
         })
@@ -43,7 +48,7 @@ $(function () {
             swal({
                 text: '検索結果が見つかりませんでした'
             }).then(function () {
-                jumpapi('bookApi/index.php');
+                jumpApi('bookApi/index.php');
             });
         }
 
@@ -100,7 +105,7 @@ $(function () {
             swal({
                 text: '何も入力されていません'
             }).then(function () {
-                jumpapi('bookApi/index.php');
+                jumpApi('bookApi/index.php');
             });
             // $(".search").after("<p class='message' style='color:red; font-weight:bold;'>何も入力されていません</p>");
         }

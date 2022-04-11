@@ -6,11 +6,10 @@ require_once "Log.php";
 require_once "Token.php";
 require_once "Utils.php";
 
-// 入力データ登録
-define("QUERY_CONTACT", "INSERT INTO contacts(name, email, title, contents) VALUES(:name, :email, :title, :contents)");
-
 class ContactAct extends Action
 {
+    const QUERY_CONTACT = "INSERT INTO contacts(name, email, title, contents) VALUES(:name, :email, :title, :contents)";
+
     public function __construct($mode = -1)
     {
         try {
@@ -23,10 +22,13 @@ class ContactAct extends Action
         }
     }
 
-    // 入力値チェック
+    // 入力値チェック & 入力データを返す
     private function validateInput()
     {
+        // 入力値をチェック
         $_POST = Utils::checkInput($_POST);
+
+        // 入力値を取得
         $name = trim(filter_input(INPUT_POST, 'name'));
         $email = trim(filter_input(INPUT_POST, 'email'));
         $email_check = trim(filter_input(INPUT_POST, 'email_check'));
@@ -78,15 +80,15 @@ class ContactAct extends Action
         }
         // 分割代入用
         return [
-      [
-        'name' => $name,
-        'email' => $email,
-        'email_check' => $email_check,
-        'title' => $title,
-        'contents' => $contents,
-      ],
-      $error
-    ];
+            [
+                'name' => $name,
+                'email' => $email,
+                'email_check' => $email_check,
+                'title' => $title,
+                'contents' => $contents,
+            ],
+            $error
+        ];
     }
 
     // 問い合わせフォームトップページ画面処理
@@ -95,8 +97,8 @@ class ContactAct extends Action
         try {
             // トークン生成
             Token::regenerate();
-            // 書き直しデータ(分割代入: 配列の中身を変数に詰めなおす)
-            [$oldInputs, $inputErrors] = $this->getOldInputWithError();
+            // 書き直しデータ
+            [$oldInputs, $inputErrors] = $this->getOldInputWithError(); //分割代入
             // ログイン時のデフォルト入力値設定
             if (!isset($oldInputs['name']) && isset($_SESSION["login_user"])) {
                 $oldInputs['name'] = $this->getMemberName();
@@ -122,7 +124,7 @@ class ContactAct extends Action
         try {
             // トークン生成
             Token::validate();
-            // 入力データ取得(分割代入: 配列の中身を変数に詰めなおす)
+            // 入力データ取得
             [$inputs, $errors] = $this->validateInput();
             // 入力内容にエラーがある場合、トップへリダイレクト
             if (!empty($errors)) {
@@ -142,7 +144,7 @@ class ContactAct extends Action
         try {
             // トークン生成
             Token::validate();
-            // 分割代入: 配列の中身を変数に詰めなおす
+            
             [$inputs, $errors] = $this->validateInput();
             // 入力内容にエラーがある場合、トップへリダイレクト
             if (!empty($errors)) {
@@ -175,53 +177,56 @@ class ContactAct extends Action
     // 入力内容送信
     private function postarticle($name, $email, $title, $contents)
     {
-        $stmt = $this->conn->prepare(QUERY_CONTACT);
-        $stmt->bindValue("name", $name, \PDO::PARAM_STR);
-        $stmt->bindValue("email", $email, \PDO::PARAM_STR);
-        $stmt->bindValue("title", $title, \PDO::PARAM_STR);
-        $stmt->bindValue("contents", $contents, \PDO::PARAM_STR);
-        $stmt->execute();
+        try {
+            $stmt = $this->conn->prepare(self::QUERY_CONTACT);
+            $stmt->bindValue("name", $name, \PDO::PARAM_STR);
+            $stmt->bindValue("email", $email, \PDO::PARAM_STR);
+            $stmt->bindValue("title", $title, \PDO::PARAM_STR);
+            $stmt->bindValue("contents", $contents, \PDO::PARAM_STR);
+            $stmt->execute();
+        } catch (\Exception $e) {
+            Log::error($e);
+            echo $e;
+        }
     }
 
+    // リダイレクト処理
     private function redirectTop()
     {
-        //エラーがある場合
-        $dirname = dirname($_SERVER['SCRIPT_NAME']);
-        $dirname = $dirname == DIRECTORY_SEPARATOR ? '' : $dirname;
-        //サーバー変数 $_SERVER['HTTPS'] が取得出来ない環境用（オプション）
-        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and $_SERVER['HTTP_X_FORWARDED_PROTO'] === "https") {
-            $_SERVER['HTTPS'] = 'on';
-        }
-        //入力画面（index.php）の URL
-        $serverName = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
-        $url = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $serverName . $dirname . '/index.php';
-        header('HTTP/1.1 303 See Other');
-        header('location: ' . $url);
+        header("Location: " . DOMAIN . "/public/contact/index.php");
         exit;
     }
 
+    // 問い合わせフォームで入力された値をセッションへの保存
     private function storeOldInput($inputs)
     {
+        // 問い合わせフォームで入力された値を格納
         $_SESSION['old_input'] = [
-        'name' => $inputs['name'],
-        'email' => $inputs['email'],
-        'email_check' => $inputs['email_check'],
-        'title' => $inputs['title'],
-        'contents' => $inputs['contents'],
-      ];
+            'name' => $inputs['name'],
+            'email' => $inputs['email'],
+            'email_check' => $inputs['email_check'],
+            'title' => $inputs['title'],
+            'contents' => $inputs['contents'],
+        ];
     }
+
+    // 問い合わせフォームで入力された値とエラーメッセージをセッションへの保存
     private function storeOldInputWithError($inputs, $errors)
     {
         $this->storeOldInput($inputs);
         $_SESSION['input_error'] = $errors;
     }
+
+    // セッションより問い合わせフォームで入力された値とエラーメッセージを取得
     private function getOldInputWithError()
     {
         return [
             $_SESSION['old_input'] ?? [],
-            $_SESSION['input_error'] ?? [], //合体演算子⇒nullの時[]を返す
-      ];
+            $_SESSION['input_error'] ?? [],
+        ];
     }
+
+    // セッションへ格納されている問い合わせフォームで入力された値とエラーメッセージを削除
     private function clearOldInputWithError()
     {
         unset($_SESSION['old_input']);
@@ -237,11 +242,11 @@ class ContactAct extends Action
         echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
         echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
         echo '<meta name="format-detection" content="telephone=no">';
-        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/CSS/bootstrap-4.4.1.css">';
-        echo '<link href="' . DOMAIN . '/public/CSS/contact.css" rel="stylesheet">';
-        echo '<script src="' . DOMAIN . '/public/JS/bootstrap-4.4.1.js"></script>';
-        echo '<script src="' . DOMAIN . '/public/JS/jquery-3.1.1.js" defer></script>';
+        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/css/bootstrap-4.4.1.css">';
+        echo '<link href="' . DOMAIN . '/public/css/contact.css" rel="stylesheet">';
+        echo '<script src="' . DOMAIN . '/public/js/jquery-3.1.1.js" defer></script>';
         echo '<script src="' . DOMAIN . '/public/contact/js/script.js" defer></script>';
+        echo '<script src="' . DOMAIN . '/public/js/bootstrap-4.4.1.js" defer></script>';
         echo '<title>' . SYSTITLE . '</title>';
         echo '</head>';
         echo '<body>';
@@ -263,7 +268,7 @@ class ContactAct extends Action
             echo '<li id="li"><a class="nav-link small text-white" href="' . DOMAIN . '/public/myPage/aHistory.php">【履歴】記事</a></li>';
             echo '<li id="li"><a class="nav-link small text-white" href="' . DOMAIN . '/public/userLogin/logout.php?user_id=' . $_SESSION["login_user"]["user_id"] . '">ログアウト</a></li>';
             echo '</ul>';
-            echo '</div>'; 
+            echo '</div>';
         } else {
             echo '<div class="navbar bg-dark text-white">';
             echo '<a href="' . DOMAIN . '/public/top/index.php" class="navtext h2 text-white text-decoration-none">novus</a>';

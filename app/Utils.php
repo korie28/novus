@@ -52,7 +52,7 @@ class Utils
     }
 
     // 特殊タグ除去(一部タグとして許容する。article/datail.php用)
-    static $stable = array (
+    public static $stable = array (
         '&lt;h1&gt;' => '<h1>',
         '&lt;/h1&gt;' =>'</h1>',
         '&lt;h2&gt;' => '<h2>',
@@ -81,17 +81,17 @@ class Utils
         '&gt;'=> '>'
     );
 
-    static $btable = array (
+    public static $btable = array (
         '/&lt;img(.*)&gt;/' => '<img$1>'
     );
 
     public static function trimHtmlTag($str)
     {
-        $str = htmlspecialchars($str, ENT_NOQUOTES);
+        $str = htmlspecialchars($str, ENT_NOQUOTES, 'UTF-8');
         // 単純なタグ
         $search = array_keys(Utils::$stable);
         $replace = array_values(Utils::$stable);
-        $str = str_replace($search, $replace, $str);
+        $str = str_replace($search, $replace, $str); // $searchを$replaceに変換
         // パラメータ付きタグ
         foreach (Utils::$btable as $key => $val) {
             $str = preg_replace($key, $val, $str);
@@ -102,7 +102,7 @@ class Utils
     // 日付文字列チェック
     public static function checkDatetimeFormat($dateTime)
     {
-        $dateTime = str_replace('/', '-', $dateTime); // - に統一
+        $dateTime = str_replace('/', '-', $dateTime); // 『/』を『-』に変換
         if ($dateTime === date("Y-m-d H:i", strtotime($dateTime)) || $dateTime === date("Y-m-d H:i:s", strtotime($dateTime))) {
             return true;
         }

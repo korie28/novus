@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once "../../app/BookApiAct.php";
 require_once '../../app/Token.php';
 
@@ -15,7 +15,7 @@ Token::create();
 
 <div class="search col-sm-8 offset-sm-2">
     <div class="search__text">
-        <input type="text" id="search-word" class="search__text__input text-center" placeholder="検索する">
+        <input type="text" id="search-word" class="search__text__input text-center search-text" placeholder="検索する">
     </div>
     <button id="search-button" class="search__btn">検索する</button>
 </div>
@@ -26,7 +26,7 @@ Token::create();
 
     <div class="col-sm-2 mb-3 text-right">
         表示件数：
-        <select id="displayed-num">
+        <select id="displayed-num" class="search-text">
             <option value=10>10件</option>
             <option value=20>20件</option>
             <option value=30>30件</option>
@@ -36,7 +36,7 @@ Token::create();
 
     <div class="col-sm-2 mb-3 text-right">
         表示順：
-        <select id="displayed-orderBy">
+        <select id="displayed-orderBy" class="search-text">
             <option value=relevance>関連度順</option>
             <option value=newest>新着順</option>
         </select>

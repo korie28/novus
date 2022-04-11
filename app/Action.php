@@ -2,17 +2,16 @@
 namespace Novus;
 
 require_once __DIR__ . "/../config/def.php";
-require_once __DIR__ . "/database.php";
+require_once __DIR__ . "/Database.php";
 require_once __DIR__ . "/Log.php";
 
-// ユーザー情報取得系
-define("QUERY_MEMBER_REF", "SELECT user_id,name,tel,name,password,email,icon,q_disp_flg,level,exp,comment,pre_level,pre_exp FROM users WHERE user_id=:user_id");
-define("QUERY_MEMBER_TEL", "SELECT user_id,name,tel,name,password,email,icon,q_disp_flg,level,exp,comment,pre_level,pre_exp FROM users WHERE tel=:tel");
-define("QUERY_MEMBERLIST_IDS", "SELECT user_id,name,tel,name,password,email,icon,q_disp_flg,level,exp,comment,pre_level,pre_exp FROM users WHERE user_id IN (%s)");
-
 // ベースクラス
-class Action 
+class Action
 {
+    // ユーザー情報取得系
+    const QUERY_MEMBER_REF = "SELECT user_id,name,tel,name,password,email,icon,q_disp_flg,level,exp,comment,pre_level,pre_exp FROM users WHERE user_id=:user_id";
+    const QUERY_MEMBERLIST_IDS = "SELECT user_id,name,tel,name,password,email,icon,q_disp_flg,level,exp,comment,pre_level,pre_exp FROM users WHERE user_id IN (%s)";
+
     protected $member;
     protected $conn;
 
@@ -23,13 +22,13 @@ class Action
         } catch (\Exception $e) {
             Log::error($e);
             echo $e;
-        }   
+        }
     }
 
     // ページ読み出し処理(各ページの最初に呼び出す)
-    // セッションがない場合は、トップページへ遷移させる
     // ページ表示不要のリクエストは,mode=1にして呼ぶ。
-    public function begin($mode = 0) {
+    public function begin($mode = 0)
+    {
         session_start();
 
         // DB接続
@@ -49,26 +48,9 @@ class Action
         }
     }
 
-    // ページ読み出し処理(各ページの初期時に呼び出す)
-    // セッション不要ページ用
-    // ページ表示不要のリクエストは,mode=1にして呼ぶ。
-    public function begin_free($mode = 0) {
-        // DB接続
-        $this->conn = Database::getInstance();
-
-        // 外部サイトからフレームでのページの読み込みを制限
-        header("X-FRAME-OPTIONS: DENY");
-
-        if ($mode == 0) {
-            $this->printHeader();
-        }
-    }
-
     // ログイン中か判定
     public function checkLogin() {
-        // Cookie
         if (isset($_SESSION["USER_ID"]) === false && isset($_SESSION["login_user"]) === false) {
-            // ログインページへ
             header('Location: '. DOMAIN .'/public/userLogin/form.php');
             // クッキーの破棄
             if (ini_get("session.use_cookies")) {
@@ -79,10 +61,6 @@ class Action
         }
     }
 
-    // メンバー情報全てを返す
-    public function getMember() {
-        return $this->member;
-    }
     // メンバーのIDを返す
     public function getMemberId() {
         return $this->member['user_id'];
@@ -99,89 +77,63 @@ class Action
     public function getMemberEmail() {
         return $this->member['email'];
     }
-    // メンバーのレベルを返す
-    public function getMemberLevel() {
-        return $this->member['level'];
-    }
-    // メンバーの経験値を返す
-    public function getMemberExp() {
-        return $this->member['exp'];
-    }
 
     // userIdからユーザ情報を取得
-    public function memberRef($userid) 
+    protected function memberRef($userid)
     {
         try {
-            $stmt = $this->conn->prepare(QUERY_MEMBER_REF);
+            $stmt = $this->conn->prepare(self::QUERY_MEMBER_REF);
             $stmt->bindValue(':user_id', $userid);
             $result = $stmt->execute();
-            if (! $result) {
-                return NULL;
-            }
-            $member = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $member;
         } catch (\Exception $e) {
             Log::error($e);
             echo $e;
         }
+
+        if (!$result) {
+            return NULL;
+        }
+
+        $member = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $member;
     }
 
-    // telからユーザ情報を取得
-    public function memberRefTel($tel) 
+    // 特定の連想配列$userからIDを取り出してユーザ情報のマップを作成
+    protected function memberMap($users, $idkey)
     {
+        $members = [];
+        $ids = [];
+        $dupMap = []; // duplicate
+
+        if (count($users) === 0) {
+            return $members; 
+        }
+
+        foreach ($users as $user) { 
+            if (isset($dupMap[$user[$idkey]])) {
+                // user_idが重複している時はスキップ
+                continue;
+            }
+            $dupMap[$user[$idkey]] = 1; //重複分をまとめる
+            $ids[] = $user[$idkey]; //各記事のuser_idを取得
+        }
+        $inClause = substr(str_repeat(',?', count($ids)), 1); // $idsの数だけ『,?』を取得
+
         try {
-            $stmt = $this->conn->prepare(QUERY_MEMBER_TEL);
-            $stmt->bindValue(':tel', $tel);
-            $result = $stmt->execute();
-            if (! $result) {
-                return NULL;
-            }
-            $member = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $member;
-        } catch (\Exception $e) {
-            Log::error($e);
-            echo $e;
-        }
-    }
-
-    // 特定の連想配列$userから、IDを取り出して、ユーザ情報のマップを作成
-    // 戻り値は user-id とユーザ情報の連想配列。
-    public function memberMap($users, $idkey) 
-    {
-        try{
-            $members = array();
-            if (count($users) === 0) {
-            // リストが 0件
-                return $members;
-            }
-        
-            // where句の作成
-            // duplicate
-            $ids = array();
-            $dupMap = array();
-            foreach ($users as $user) {
-                if (isset($dupMap[$user[$idkey]])) {
-                  // user_idが重複している時はスキップ
-                    continue;
-                }
-                $dupMap[$user[$idkey]] = 1;
-                $ids[] = $user[$idkey];
-            }
-            $inClause = substr(str_repeat(',?', count($ids)), 1);
-        
-            // メンバー情報取得
-            $stmt = $this->conn->prepare(sprintf(QUERY_MEMBERLIST_IDS, $inClause));
+            // 非重複分だけメンバー情報取得
+            $stmt = $this->conn->prepare(sprintf(self::QUERY_MEMBERLIST_IDS, $inClause));
             $result = $stmt->execute($ids);
-            if ($result) {
-                while ($mem = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                    $members[$mem['user_id']] = $mem;
-                }
-            }
-            return $members;
         } catch (\Exception $e) {
             Log::error($e);
             echo $e;
         }
+
+        if ($result) {
+            while ($mem = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $members[$mem['user_id']] = $mem; //表示中のユーザー情報
+            }
+        }
+        return $members; // user_idとユーザ情報の連想配列
     }
 
     // 開始タグ
@@ -192,18 +144,18 @@ class Action
         echo '<meta charset=UTF-8" http-equiv="Content-Type">';
         echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
         echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/CSS/novus.css?ver=' . VERSION . '">';
-        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/CSS/jquery.datetimepicker.css">';
-        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/CSS/bootstrap-4.4.1.css">';
+        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/css/novus.css?ver=' . VERSION . '">';
+        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/css/jquery.datetimepicker.css">';
+        echo '<link rel="stylesheet" href="' . DOMAIN . '/public/css/bootstrap-4.4.1.css">';
         echo '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">';
         echo '<script src="https://kit.fontawesome.com/3f20c0ff36.js" crossorigin="anonymous"></script>';
         echo '<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>';
         echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>';
-        echo '<script src="' . DOMAIN . '/public/JS/jquery-3.1.1.js"></script>';
-        echo '<script src="' . DOMAIN . '/public/JS/jquery.datetimepicker.full.js"></script>'; 
-        echo '<script src="' . DOMAIN . '/public/JS/qapi.js" defer></script>';
-        echo '<script src="' . DOMAIN . '/public/JS/bootstrap-4.4.1.js"></script>';
-        echo '<script src="' . DOMAIN . '/public/JS/marked.min.v1.js"></script>';
+        echo '<script src="' . DOMAIN . '/public/js/jquery-3.1.1.js"></script>';
+        echo '<script src="' . DOMAIN . '/public/js/jquery.datetimepicker.full.js"></script>';
+        echo '<script src="' . DOMAIN . '/public/js/qapi.js"></script>';
+        echo '<script src="' . DOMAIN . '/public/js/bootstrap-4.4.1.js" defer></script>';
+        echo '<script src="' . DOMAIN . '/public/js/marked.min.v1.js"></script>';
         echo '<title>' . SYSTITLE . '</title>';
         echo '</head>';
         echo '<body>';
@@ -257,7 +209,7 @@ class Action
             }
             if (isset($_SESSION['login_user'])) {
                 echo '<div class="col-sm-2">';
-                echo '<a class="btn btn-primary m-2" href="' .DOMAIN. '/public/article/postedit.php">投稿する</a>';
+                echo '<a class="btn btn-primary m-2" href="' .DOMAIN. '/public/article/postEdit.php">投稿する</a>';
                 echo '</div>';
             } else {
                 echo '<div class="col-sm-2">';

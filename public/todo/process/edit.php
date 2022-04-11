@@ -38,5 +38,8 @@ if (!Utils::checkDatetimeFormat($editTodoDt)) {
 
 $act->edit($editTodoId, $editTodoTitle, $editTodoDt);
 
+// 二重送信防止
+Token::regenerate();
+
 // todo一覧へリダイレクト
 header('Location: ' . DOMAIN . '/public/todo/index.php');

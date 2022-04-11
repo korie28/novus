@@ -6,7 +6,11 @@ use Novus\ContactAct;
 use Novus\Utils;
 
 $act = new ContactAct(1);
+
+// 入力欄の初期値、及びエラーメッセージ取得
 [$inputs, $errors] = $act->index();
+
+// ヘッダー出力
 $act->printHeader();
 ?>
 

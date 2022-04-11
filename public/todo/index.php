@@ -10,7 +10,7 @@ use Novus\Utils;
 // ToDo一覧取得
 $act = new ToDoAct();
 $retInfo = $act->begin(); //ユーザー情報呼び出し
-$retInfo = $act->get(); //todoの全情報取得
+$retInfo = $act->get(); //todoの一覧取得
 
 //ログインチェック
 $act->checkLogin();
@@ -200,9 +200,9 @@ $icon = $act->getMemberIcon();
             if (isConfirm) {
                 var $data = 'todoId=' + todoId + '&token=<?php echo $_SESSION["token"]; ?>';
                 // ajax呼び出し
-                formapiCallback('todo/process/delete.php', $data, function(result) {
+                formApiCallback('todo/process/delete.php', $data, function(result) {
                     // 一覧を再読み込み
-                    jumpapi('todo/index.php');
+                    jumpApi('todo/index.php');
                 });
             }
         });
@@ -213,9 +213,9 @@ $icon = $act->getMemberIcon();
         var todoId = $(this).attr('todoId');
         var $data = 'state=finish&todoId=' + todoId + '&token=<?php echo $_SESSION["token"]; ?>';
         // ajax呼び出し
-        formapiCallback('todo/process/toggle.php', $data, function(result) {
+        formApiCallback('todo/process/toggle.php', $data, function(result) {
             // 一覧を再読み込み
-            jumpapi('todo/index.php');
+            jumpApi('todo/index.php');
         });
     }
     // ステータス更新(return)
@@ -223,9 +223,9 @@ $icon = $act->getMemberIcon();
         var todoId = $(this).attr('todoId');
         var $data = 'state=active&todoId=' + todoId + '&token=<?php echo $_SESSION["token"]; ?>';
         // ajax呼び出し
-        formapiCallback('todo/process/toggle.php', $data, function(result) {
+        formApiCallback('todo/process/toggle.php', $data, function(result) {
             // 一覧を再読み込み
-            jumpapi('todo/index.php');
+            jumpApi('todo/index.php');
         });
     }
 

@@ -6,7 +6,11 @@ use Novus\ContactAct;
 use Novus\Utils;
 
 $act = new ContactAct(1);
+
+// 入力値の検証⇒確認画面に表示する値を受け取る
 $inputs = $act->confirm();
+
+// ヘッダー出力
 $act->printHeader();
 ?>
 
@@ -17,28 +21,28 @@ $act->printHeader();
     <div class="offset-sm-2">
         <div>
             <p class="mt-4">
-            以下の内容でよろしければ「送信する」を選択してください。<br>
-            内容を変更する場合は「戻る」を選択して入力画面にお戻りください。
+                以下の内容でよろしければ「送信する」を選択してください。<br>
+                内容を変更する場合は「戻る」を選択して入力画面にお戻りください。
             </p>
         </div>
         <div class="table-responsive confirm_table">
             <table class="table table-bordered">
                 <caption>ご入力内容</caption>
                 <tr>
-                <th>お名前</th>
-                <td style="overflow: hidden; overflow-wrap: break-word;"><?php echo Utils::h($inputs['name']); ?></td>
+                    <th>お名前</th>
+                    <td style="overflow: hidden; word-break: break-all;"><?php echo Utils::h($inputs['name']); ?></td>
                 </tr>
                 <tr>
-                <th>Email</th>
-                <td style="overflow: hidden; overflow-wrap: break-word;"><?php echo Utils::h($inputs['email']); ?></td>
+                    <th>Email</th>
+                    <td style="overflow: hidden; word-break: break-all;"><?php echo Utils::h($inputs['email']); ?></td>
                 </tr>
                 <tr>
-                <th>タイトル</th>
-                <td style="overflow: hidden; overflow-wrap: break-word;"><?php echo Utils::h($inputs['title']); ?></td>
+                    <th>タイトル</th>
+                    <td style="overflow: hidden; word-break: break-all;"><?php echo Utils::h($inputs['title']); ?></td>
                 </tr>
                 <tr>
-                <th>お問い合わせ内容</th>
-                <td class="text-break" style="overflow: hidden; overflow-wrap: break-word;"><?php echo nl2br(Utils::h($inputs['contents'])); ?></td>
+                    <th>お問い合わせ内容</th>
+                    <td class="text-break" style="overflow: hidden; word-break: break-all;"><?php echo nl2br(Utils::h($inputs['contents'])); ?></td>
                 </tr>
             </table>
         </div>

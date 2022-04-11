@@ -5,43 +5,46 @@ require_once 'Action.php';
 require_once "Log.php";
 require_once 'Utils.php';
 
-// ToDo取得系
-define("QUERY_TODO_LIST", "SELECT todo_id,user_id,title,status,remind_date FROM todo WHERE user_id=:user_id");
-
-// ToDo更新系
-define("INSERT_TODO", "INSERT INTO todo (user_id,title,status,remind_date) VALUES (:user_id, :title, 'active', :remind_date)");
-define("UPDATE_TODO", "UPDATE todo SET title=:title,remind_date=:remind_date WHERE todo_id=:todo_id AND user_id=:user_id");
-define("UPDATE_TODO_STATUS", "UPDATE todo SET status=:state WHERE todo_id=:todo_id AND user_id=:user_id");
-define("DELETE_TODO", "DELETE FROM todo WHERE todo_id=:todo_id AND user_id=:user_id");
-
-// タイトルの長さ
-define("TITLE_LENGTH", 128);
-
-// ToDO関連のクラス
+// todo関係
 class TodoAct extends Action
-{
+{ 
+    // 取得系
+    const QUERY_TODO_LIST = "SELECT todo_id,user_id,title,status,remind_date FROM todo WHERE user_id=:user_id";
+    // 更新系
+    const INSERT_TODO = "INSERT INTO todo (user_id,title,status,remind_date) VALUES (:user_id, :title, 'active', :remind_date)";
+    const UPDATE_TODO = "UPDATE todo SET title=:title,remind_date=:remind_date WHERE todo_id=:todo_id AND user_id=:user_id";
+    const UPDATE_TODO_STATUS = "UPDATE todo SET status=:state WHERE todo_id=:todo_id AND user_id=:user_id";
+    const DELETE_TODO = "DELETE FROM todo WHERE todo_id=:todo_id AND user_id=:user_id";
+
     // $mode>=0の場合、明示的にbeginを呼び出す
-    public function __construct($mode = -1) {
+    public function __construct($mode = -1) 
+    {
         try {
             if ($mode >= 0) {
                 $this->begin($mode);
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e);
             echo $e;
         }
     }
 
-    // todo一覧取得
+    // 一覧取得
     public function get()
     {
-        // todo情報取得
-        $retInfo = array(); 
-        $activeList = array(); //やることリスト
-        $finList = array(); //終わったことリスト
-        $stmt = $this->conn->prepare(QUERY_TODO_LIST);
-        $stmt->bindValue(':user_id', $this->member['user_id']);
-        $result = $stmt->execute();
+        $retInfo = []; 
+        $activeList = []; //やることリスト
+        $finList = []; //終わったことリスト
+
+        try {
+            $stmt = $this->conn->prepare(self::QUERY_TODO_LIST);
+            $stmt->bindValue(':user_id', $this->member['user_id']);
+            $result = $stmt->execute();
+        } catch (\Exception $e) {
+            Log::error($e);
+            echo $e;
+        }
+
         if ($result) {
             while ($rec =  $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 switch ($rec['status']) {
@@ -65,11 +68,17 @@ class TodoAct extends Action
         if (!$title || !$remind_date) {
             return;
         }
-        $stmt = $this->conn->prepare(INSERT_TODO);
-        $stmt->bindValue(':user_id', $this->member['user_id']);
-        $stmt->bindValue(':title', $title);
-        $stmt->bindValue(':remind_date', $remind_date);
-        $stmt->execute();
+
+        try {
+            $stmt = $this->conn->prepare(self::INSERT_TODO);
+            $stmt->bindValue(':user_id', $this->member['user_id']);
+            $stmt->bindValue(':title', $title);
+            $stmt->bindValue(':remind_date', $remind_date);
+            $stmt->execute();
+        } catch (\Exception $e) {
+            Log::error($e);
+            echo $e;
+        }
     }
 
     // 編集
@@ -78,12 +87,18 @@ class TodoAct extends Action
         if (!$todo_id || !$title || !$remind_date ) {
             return;
         }
-        $stmt = $this->conn->prepare(UPDATE_TODO);
-        $stmt->bindValue(':todo_id', $todo_id);
-        $stmt->bindValue(':user_id', $this->member['user_id']);
-        $stmt->bindValue(':title', $title);
-        $stmt->bindValue(':remind_date', $remind_date);
-        return $stmt->execute();
+
+        try {
+            $stmt = $this->conn->prepare(self::UPDATE_TODO);
+            $stmt->bindValue(':todo_id', $todo_id);
+            $stmt->bindValue(':user_id', $this->member['user_id']);
+            $stmt->bindValue(':title', $title);
+            $stmt->bindValue(':remind_date', $remind_date);
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            Log::error($e);
+            echo $e;
+        }
     }
 
     // 状態変更
@@ -92,14 +107,21 @@ class TodoAct extends Action
         if (!$todo_id) {
             return;
         }
+
         if ($state != 'active' && $state != 'finish') {
             return;
         }
-        $stmt = $this->conn->prepare(UPDATE_TODO_STATUS);
-        $stmt->bindValue(':todo_id', $todo_id);
-        $stmt->bindValue(':user_id', $this->member['user_id']);
-        $stmt->bindValue(':state', $state);
-        return $stmt->execute();
+
+        try {
+            $stmt = $this->conn->prepare(self::UPDATE_TODO_STATUS);
+            $stmt->bindValue(':todo_id', $todo_id);
+            $stmt->bindValue(':user_id', $this->member['user_id']);
+            $stmt->bindValue(':state', $state);
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            Log::error($e);
+            echo $e;
+        }
     }
 
     // 削除
@@ -108,10 +130,16 @@ class TodoAct extends Action
         if (!$todo_id) {
             return;
         }
-        $stmt = $this->conn->prepare(DELETE_TODO);
-        $stmt->bindValue(':todo_id', $todo_id);
-        $stmt->bindValue(':user_id', $this->member['user_id']);
-        return $stmt->execute();
+
+        try {
+            $stmt = $this->conn->prepare(self::DELETE_TODO);
+            $stmt->bindValue(':todo_id', $todo_id);
+            $stmt->bindValue(':user_id', $this->member['user_id']);
+            return $stmt->execute();
+        } catch (\Exception $e) {
+            Log::error($e);
+            echo $e;
+        }
     }
 
     // ページ表示がないファイルは、mode=1で呼ぶ
