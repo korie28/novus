@@ -497,7 +497,7 @@ class UserLogic
         
     // 新しいレベルが取得レベルと同じ場合
     } else {
-    // 経験値だけを更新するSQLの定義
+        // 経験値だけを更新するSQLの定義
         $sql_upd = 'UPDATE users SET exp=? WHERE user_id=?';   
         $arr = [];
         $arr[] = $new_exp;
