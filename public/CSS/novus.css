@@ -13,6 +13,9 @@
     border-bottom: 3px double #ccc;
     display: inline-block;
   }
+  h3{
+    color: red;
+  }
 
 
 .navbar{

@@ -124,12 +124,11 @@ $act->printHeader();
                             <h3 class="mt-4 mb-4" style="font-weight: bold;">利用方法</h3>
                         </div>
                         <div class="text-center">
-                            # おはよう → <span style="font-size:2.5rem; font-weight:bold; line-height:1.2; border-bottom: 3px double #ccc; display: inline-block;">おはよう</span><br>
-                            ## おはよう → <span style="font-size:2rem; font-weight:500; line-height:1.2;">おはよう</span><br>
-                            ### おはよう → <span style="font-size:1.75rem; font-weight:500; line-height:1.2;">おはよう</span><br><br>
+                            # おはよう → <span style="font-size:2.5rem; font-weight:bold; line-height:1.2; border-bottom: 3px double #ccc; display: inline-block;">おはよう</span><br><br>
+                            ## おはよう → <span style="font-size:2rem; font-weight:500; line-height:1.2;">おはよう</span><br><br>
+                            ### おはよう → <span style="font-size:1.75rem; font-weight:500; line-height:1.2; color:red;">おはよう</span><br><br>
                             - おはよう → <span>・おはよう</span><br><br>
                             ~~おはよう~~ → <del>おはよう</del><br><br>
-                            `おはよう` → <span style="color:red;">おはよう</span><br><br>
                             ※各記号は半角のみ有効
                         </div>
                         <div class="close btn btn-danger mt-3 mr-3">CLOSE</div>
