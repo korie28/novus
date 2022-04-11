@@ -36,7 +36,6 @@ class Action
 
         // ユーザー情報をmemberに入れる
         if (isset($_SESSION['login_user'])) {
-        // セッションに全部ある場合
             $this->member = $_SESSION['login_user'];
         }
 
