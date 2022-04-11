@@ -144,7 +144,7 @@ if (isset($_POST['like_regist'])) {
                     </div>
                     <!--題名-->
                     <div class="fw-bold pb-1">題名</div>
-                        <div style="overflow: hidden; overflow-wrap: break-word;"><?php echo $question['title']; ?></div>
+                        <div style="overflow: hidden; overflow-wrap: break-word;"><?php echo nl2br(htmlspecialchars($question['title'])); ?></div>
                     <!--本文-->
                     <div class="fw-bold pt-3 pb-1">本文</div>
                         <div style="overflow: hidden; overflow-wrap: break-word;"><?php echo nl2br(htmlspecialchars($question['message'], \ENT_QUOTES, 'UTF-8')); ?></div>

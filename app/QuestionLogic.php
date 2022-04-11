@@ -124,17 +124,17 @@ class QuestionLogic
     public static function displayQuestion($questionData)
     {
         $result = false;
-  
+
         $sql = 'SELECT question_id, title, message, post_date, upd_date, best_select_flg, users.user_id, name, icon, categories.cate_id, category_name, color
                 FROM question_posts
                 INNER JOIN users ON users.user_id = question_posts.user_id
                 INNER JOIN categories ON question_posts.cate_id = categories.cate_id
                 WHERE question_id = ?';
-  
+
         // question_idを配列に入れる
         $arr = [];
         $arr[] = $questionData['question_id'];
-  
+
         try {
             $stmt = connect()->prepare($sql);
             // SQL実行
@@ -159,7 +159,7 @@ class QuestionLogic
     public static function createQuestion()
     {
         $result = false;
-  
+
         $sql = 'INSERT INTO question_posts (user_id, title, message, cate_id) VALUES (?, ?, ?, ?)';
         // 質問データを配列に入れる
         $arr = [];
@@ -167,7 +167,7 @@ class QuestionLogic
         $arr[] = $_SESSION['q_data']['title'];
         $arr[] = $_SESSION['q_data']['message'];
         $arr[] = $_SESSION['q_data']['category'];
-  
+
         try {
             $stmt = connect()->prepare($sql);
             // SQL実行
@@ -208,7 +208,7 @@ class QuestionLogic
         // SQLの実行
         // SQLの結果を返す
         $sql = 'UPDATE question_posts SET title=?,message=?,upd_date=?,cate_id=? WHERE question_id = ?';
-         
+
         // 編集データを配列に入れる
         $arr = [];
         $arr[] = $_SESSION['q_data']['title'];
@@ -216,7 +216,7 @@ class QuestionLogic
         $arr[] = $upd_date;
         $arr[] = $_SESSION['q_data']['category'];
         $arr[] = $_SESSION['q_data']['question_id'];
-          
+
         try {
             $stmt = connect()->prepare($sql);
             // SQL実行
@@ -252,9 +252,9 @@ class QuestionLogic
         $result = false;
         // 削除前に、質問に対して返答がついているかを検索
         $sql_search_ans = 'SELECT users.user_id, name, icon, message, answer_id, answer_date, upd_date
-                          FROM question_answers
-                          INNER JOIN users ON users.user_id = question_answers.user_id 
-                          WHERE question_answers.question_id = ?';
+                            FROM question_answers
+                            INNER JOIN users ON users.user_id = question_answers.user_id 
+                            WHERE question_answers.question_id = ?';
         // question_idを配列に入れる
         $arr = [];
         $arr[] = $questionData;
@@ -314,7 +314,7 @@ class QuestionLogic
                     }
                 }
             }
-  
+
             // 質問に紐づく返答を消去
             $sql_dlt_ans = 'DELETE FROM question_answers WHERE question_id = ?';
             // question_idを配列に入れる
@@ -329,7 +329,7 @@ class QuestionLogic
                 return false;
             }
         }
-  
+
         // 質問を消去
         $sql_dlt = 'DELETE FROM question_posts WHERE question_id = ?';
         
@@ -354,14 +354,14 @@ class QuestionLogic
     public static function displayOneAnswer($answerId)
     {
         $result = false;
-  
+
         $sql = 'SELECT * FROM question_answers
                 WHERE question_answers.answer_id = ?';
-  
+
         // question_idを配列に入れる
         $arr = [];
         $arr[] = $answerId;
-  
+
         try {
             $stmt = connect()->prepare($sql);
             // SQL実行
@@ -385,12 +385,12 @@ class QuestionLogic
     public static function displayAnswer($answerData)
     {
         $result = false;
-  
+
         $sql = 'SELECT users.user_id, name, icon, message, answer_id, answer_date, best_flg, upd_date
                 FROM question_answers
                 INNER JOIN users ON users.user_id = question_answers.user_id 
                 WHERE question_answers.question_id = ? ORDER BY question_answers.answer_id DESC';
-  
+
         // question_idを配列に入れる
         $arr = [];
         $arr[] = $answerData;
